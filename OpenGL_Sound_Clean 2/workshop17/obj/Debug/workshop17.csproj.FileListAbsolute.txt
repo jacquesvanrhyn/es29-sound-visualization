@@ -1,0 +1,60 @@
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\workshop17.exe.config
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\piano.wav
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\workshop17.exe
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\workshop17.pdb
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\C_sawapan_media.dll
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\OpenTK.dll
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\OpenTK.GLControl.dll
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\OpenTK.xml
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\OpenTK.GLControl.xml
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.csprojResolveAssemblyReference.cache
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.Form1.resources
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.Properties.Resources.resources
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.csproj.GenerateResource.Cache
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.exe
+\\vmware-host\Shared Folders\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.pdb
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\workshop17.exe.config
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.exe
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.pdb
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\piano.wav
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\workshop17.exe
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\workshop17.pdb
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\C_sawapan_media.dll
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\OpenTK.dll
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\OpenTK.GLControl.dll
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\OpenTK.xml
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\bin\Debug\OpenTK.GLControl.xml
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.csprojResolveAssemblyReference.cache
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.Form1.resources
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.Properties.Resources.resources
+\\Mac\Home\Desktop\OpenGL_Sound_Clean\workshop17\obj\Debug\workshop17.csproj.GenerateResource.Cache
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\bin\Debug\workshop17.exe.config
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.exe
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.pdb
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\bin\Debug\piano.wav
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\bin\Debug\workshop17.exe
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\bin\Debug\workshop17.pdb
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\bin\Debug\C_sawapan_media.dll
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\bin\Debug\OpenTK.dll
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\bin\Debug\OpenTK.GLControl.dll
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\bin\Debug\OpenTK.xml
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\bin\Debug\OpenTK.GLControl.xml
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.csprojResolveAssemblyReference.cache
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.Form1.resources
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.Properties.Resources.resources
+\\Mac\Home\Desktop\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.csproj.GenerateResource.Cache
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\bin\Debug\workshop17.exe.config
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.exe
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.pdb
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\bin\Debug\piano.wav
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\bin\Debug\workshop17.exe
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\bin\Debug\workshop17.pdb
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\bin\Debug\C_sawapan_media.dll
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\bin\Debug\OpenTK.dll
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\bin\Debug\OpenTK.GLControl.dll
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\bin\Debug\OpenTK.xml
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\bin\Debug\OpenTK.GLControl.xml
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.csprojResolveAssemblyReference.cache
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.Form1.resources
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.Properties.Resources.resources
+\\Mac\Home\Desktop\ES29 FP\OpenGL_Sound_Clean 2\workshop17\obj\Debug\workshop17.csproj.GenerateResource.Cache
