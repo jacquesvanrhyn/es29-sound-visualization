@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 using C_sawapan_media;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
+
 
 namespace workshop17
 {
@@ -42,6 +44,8 @@ namespace workshop17
             MediaIO.SoundIn.Start();
         }
 
+        double time = 0.0;
+
         public void Terminate()
         {
             MediaIO.SoundIn.Stop();
@@ -54,8 +58,7 @@ namespace workshop17
 
         Vector3d viewTarget = new Vector3d(0.0, 0.0, 0.0);
 
-        double time = 0.0;
-
+       
         //animation function. This contains code executed 20 times per second.
         public void OnFrameUpdate()
         {
@@ -94,18 +97,14 @@ namespace workshop17
             
             //view matrix
             //@ Linda, this matrix is where we're looking in from - you can change it up with all kinds of kewl functions
-            //@ Linda, try uncommenting the second part of eyeZ - wwwowow  so swag
+            //@ Linda, try uncommenting the second part of eyeZ above - wwwowow so swag
             Matrix4d look = Matrix4d.LookAt(eyeX, eyeY, eyeZ, viewTarget.X, viewTarget.Y,  viewTarget.Z, 0.0, 0.0, 1.0);
             GL.LoadMatrix(ref look);
-
-            
             
             GL.Color4(0.0, 0.0, 0.0, 1.0);
             GL.Begin(PrimitiveType.Lines);
             
             //creates a cube 
-
-            int[] myArray3= new int[2] {1,2};
 
             //create a sick cube - wowowowow
             double[] vertexarray = new double[72] {
@@ -161,16 +160,11 @@ namespace workshop17
 
                 GL.End();
 
-                // vertexarray = [1.0, 2.0, 3.0];
-
-
-                //GL.Frustum(40.0, 30.0, 0.5, Height, Width, 20.0);
-                //GL.Ortho(0.0, Width, 0.0, Height, -1.0, 1.0);
-                //GL.Ortho(0.0, Width, Height, 0.0, -1.0, 10.0);
             GL.Color4(1.0, 1.0, 1.0, 1.0);
 
-
             // ..............................................  draw an awesome circle with Math - wowow
+            //......@Linda - have a look at this part first
+            
             /*
             double radius = 1.0;
             GL.Begin(PrimitiveType.LineStrip);
@@ -180,10 +174,11 @@ namespace workshop17
                 GL.Vertex3(Math.Cos(inradians) * radius, Math.Sin(inradians) * radius, 0.0);
             }
             GL.End();
-             */
+           */
 
-
-            // ..............................................  the awesome circle oscilate with Math - wowow
+            /*
+            // ..............................................  the awesome circle can oscilate with Math - wowow
+            // @ Linda - it's about to get 2kewl4skewl
             double radius = 2.0;
             GL.Begin(PrimitiveType.LineStrip);
 
@@ -232,9 +227,62 @@ namespace workshop17
                     double inradians = Math.PI / 180 * (i * 4);
                     GL.Vertex3(Math.Cos(inradians) * radius, Math.Sin(inradians) * radius, Mic.WaveLeft[i] * 5.0);
                 }
-               */ 
+               
              
             }
+           */
+            
+            // ........................... make a spherical point cloud
+
+            /*
+            // @Linda- can you try to get this array implemented outside of this function so that these points are permanently visible?
+            // first, we need to generate a metric fuckton of indiviual points
+            int spherenum = 1000;
+            // theta and phi can be no more than 2 radians
+            double max = Math.PI * 2;
+
+            double maxrad = 3.0;
+
+            double phi = 0.0;
+            double theta = 0.0;
+            double rad = 0.0;
+            double x = 0.0; 
+            double y = 0.0;
+            double z = 0.0;
+
+            GL.Begin(PrimitiveType.Points);
+            for (int i = 0; i < spherenum; i++)
+            {
+                phi = Random() / 100.0 * max;
+                theta = Random() / 100.0 * max;
+                rad = Random() / 100.0 * maxrad;
+                x = rad * Math.Cos(theta) * Math.Sin(phi);
+                y = rad * Math.Sin(theta) * Math.Cos(phi);
+                z = rad * Math.Cos(phi);
+                GL.Vertex3(x, y, z);
+            }
+                
+            GL.End();
+            */
+
+            
+            /*
+            GL.Begin(PrimitiveType.Points);
+            for (int i = 0; i < spherenum; i++)
+            {
+                phi = Random() * max;
+                theta = Random() * max;
+                rad = Random() * maxrad;
+
+                x = rad * Math.Cos(theta) * Math.Sin(phi);
+                y = rad * Math.Sin(theta) * Math.Cos(phi);
+                z = rad * Math.Cos(phi);
+
+                GL.Vertex3(x, y, z);
+            }
+
+            GL.End();
+            */
 
             /*
             //...........................................A simple tone
@@ -565,5 +613,23 @@ namespace workshop17
             
 
         }
+
+        /*
+        private double randomnumber(double p, double max)
+        {
+            throw new NotImplementedException();
+        }
+        */
+        
+        private int Random()
+        {
+            Random random = new Random();
+            Int32 minimum = 0;
+            Int32 maximum = 100; 
+            return random.Next(minimum,maximum);
+        }
+        
+
+
     }
 }
