@@ -50,7 +50,7 @@ namespace workshop17
         double angleXY = 0.0;
         double angleZ = 0.0;
 
-        double viewDistance = 5.0;
+        double viewDistance = 10.0;
 
         Vector3d viewTarget = new Vector3d(0.0, 0.0, 0.0);
 
@@ -73,12 +73,13 @@ namespace workshop17
             time += 0.1;
 
             angleXY = time;
-            angleZ = Math.Cos(time)*Math.PI*0.4;
+            angleZ = Math.PI*0.1;
+            //angleZ = Math.Cos(time)*Math.PI*0.4;
 
 
-            double eyeX = viewTarget.X+ viewDistance * Math.Cos(angleXY)*Math.Cos(angleZ);
-            double eyeY = viewTarget.Y+ viewDistance * Math.Sin(angleXY)*Math.Cos(angleZ);
-            double eyeZ = viewTarget.Z+  viewDistance* Math.Sin(angleZ);
+            double eyeX = viewTarget.X + viewDistance * Math.Cos(angleXY)*Math.Cos(angleZ);
+            double eyeY = viewTarget.Y + viewDistance * Math.Sin(angleXY)*Math.Cos(angleZ);
+            double eyeZ = viewTarget.Z +  viewDistance* Math.Sin(angleZ);
 
            
             GL.MatrixMode(MatrixMode.Projection);
@@ -92,55 +93,75 @@ namespace workshop17
             Matrix4d look = Matrix4d.LookAt(eyeX, eyeY, eyeZ, viewTarget.X, viewTarget.Y, viewTarget.Z, 0.0, 0.0, 1.0);
             GL.LoadMatrix(ref look);
 
-
+            
+            
             GL.Color4(0.0, 0.0, 0.0, 1.0);
             GL.Begin(PrimitiveType.Lines);
-            GL.Vertex3(0.0, 0.0, 0.0);
-            GL.Vertex3(1.0, 0.0, 0.0);
+            
+            //creates a cube 
 
-            GL.Vertex3(1.0, 0.0, 0.0);
-            GL.Vertex3(1.0, 1.0, 0.0);
+            int[] myArray3= new int[2] {1,2};
 
-            GL.Vertex3(1.0, 1.0, 0.0);
-            GL.Vertex3(0.0, 1.0, 0.0);
+            //create a sick cube - wowowowow
+            double[] vertexarray = new double[72] {
+                                                 1.0, 1.0, 1.0, 
+                                                 1.0, -1.0, 1.0,
 
-            GL.Vertex3(0.0, 1.0, 0.0);
-            GL.Vertex3(0.0, 0.0, 0.0);
+                                                 1.0, -1.0, 1.0,
+                                                 -1.0, -1.0, 1.0,
 
+                                                 -1.0, -1.0, 1.0, 
+                                                 -1.0, 1.0, 1.0,
 
-
-
-            GL.Vertex3(0.0, 0.0, 1.0);
-            GL.Vertex3(1.0, 0.0, 1.0);
-
-            GL.Vertex3(1.0, 0.0, 1.0);
-            GL.Vertex3(1.0, 1.0, 1.0);
-
-            GL.Vertex3(1.0, 1.0, 1.0);
-            GL.Vertex3(0.0, 1.0, 1.0);
-
-            GL.Vertex3(0.0, 1.0, 1.0);
-            GL.Vertex3(0.0, 0.0, 1.0);
+                                                 -1.0, 1.0, 1.0,
+                                                 1.0, 1.0, 1.0,
 
 
-            GL.Vertex3(0.0, 0.0, 0.0);
-            GL.Vertex3(0.0, 0.0, 1.0);
 
-            GL.Vertex3(1.0, 0.0, 0.0);
-            GL.Vertex3(1.0, 0.0, 1.0);
+                                                 1.0, 1.0, -1.0, 
+                                                 1.0, -1.0, -1.0,
 
-            GL.Vertex3(1.0, 1.0, 0.0);
-            GL.Vertex3(1.0, 1.0, 1.0);
+                                                 1.0, -1.0, -1.0,
+                                                 -1.0, -1.0, -1.0,
 
-            GL.Vertex3(0.0, 1.0, 0.0);
-            GL.Vertex3(0.0, 1.0, 1.0);
+                                                 -1.0, -1.0, -1.0, 
+                                                 -1.0, 1.0, -1.0,
 
-            GL.End();
+                                                 -1.0, 1.0, -1.0,
+                                                 1.0, 1.0, -1.0,
 
-          //  return;
-            //GL.Frustum(40.0, 30.0, 0.5, Height, Width, 20.0);
-          //  GL.Ortho(0.0, Width, 0.0, Height, -1.0, 1.0);
-            //GL.Ortho(0.0, Width, Height, 0.0, -1.0, 10.0);
+
+
+                                                 1.0, 1.0, 1.0,
+                                                 1.0, 1.0, -1.0,
+
+                                                 1.0, -1.0, 1.0,
+                                                 1.0, -1.0, -1.0,
+
+                                                 
+                                                 -1.0, -1.0, 1.0,
+                                                 -1.0, -1.0, -1.0,
+
+                                                 -1.0, 1.0, 1.0,
+                                                 -1.0, 1.0, -1.0
+
+                                                  };
+
+
+            for (int i = 0; i < 72; i = i + 3)
+            {
+                GL.Vertex3(vertexarray[i], vertexarray[i + 1], vertexarray[i + 2]);
+            }
+
+
+                GL.End();
+
+                // vertexarray = [1.0, 2.0, 3.0];
+
+
+                //GL.Frustum(40.0, 30.0, 0.5, Height, Width, 20.0);
+                //GL.Ortho(0.0, Width, 0.0, Height, -1.0, 1.0);
+                //GL.Ortho(0.0, Width, Height, 0.0, -1.0, 10.0);
             GL.Color4(1.0, 1.0, 1.0, 1.0);
 
             /*
@@ -163,9 +184,9 @@ namespace workshop17
                 Sound1.Play(false);
             }
              */
-             
-           
-            
+
+
+
             /*
             //...........................................A simple tone interactive [pan, freq]
            if (!Sound1.IsPlaying)
@@ -250,7 +271,8 @@ namespace workshop17
                 double analysisDuration = (double)size / (double)Mic.SamplesPerSecond;
                 dx = 5.0 / (double)size;
 
-
+                
+                // Pan's wave
                 //draw input waveform
                 GL.Color4(1.0, 1.0, 1.0, 1.0);
                 GL.Begin(PrimitiveType.LineStrip);
