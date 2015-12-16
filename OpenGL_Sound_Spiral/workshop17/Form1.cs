@@ -27,6 +27,14 @@ namespace workshop17
             glControl1.Paint += glControl1_Paint;
             glControl1.MouseMove += GlControl1_MouseMove;
             this.FormClosing += Form1_FormClosing;
+
+            nextButton.Click += nextButton_Click;
+        }
+
+        void nextButton_Click(object sender, EventArgs e)
+        {
+            mediawin.state++;
+            if (mediawin.state > 3) mediawin.state = 0;
         }
 
         private void GlControl1_MouseMove(object sender, MouseEventArgs e)

@@ -61,6 +61,7 @@ namespace workshop17
 
         Vector3d viewTarget = new Vector3d(0.0, 0.0, 0.0);
 
+        public int state = 0;
        
         //animation function. This contains code executed 20 times per second.
         public void OnFrameUpdate()
@@ -73,14 +74,24 @@ namespace workshop17
             if (mouseXnorm < 0.0) mouseXnorm = 0.0;
             if (mouseYnorm < 0.0) mouseYnorm = 0.0;
 
+            if (state==0)
             GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
+            else if (state == 1)
+            {
+                GL.ClearColor(0.8f, 0.6f, 0.6f, 1.0f);
+            }
+            else
+            {
+                GL.ClearColor(0.6f, 0.6f, 0.7f, 1.0f);
+            }
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             time += 0.1;
 
             angleXY = time;
+            viewDistance = 5.0;
             //angleXY = MouseX;
-            angleZ = Math.PI*0.1;
+            angleZ =Math.PI*SoundIN.TheSoundIN.AverageVolume*50.0;
             //angleZ = Math.Cos(time)*Math.PI*0.4;
             //angleZ = MouseY;
 
@@ -90,9 +101,9 @@ namespace workshop17
             //double eyeX = 0.0;
             //double eyeY = 0.0;
             
-            //double eyeZ = viewTarget.Z +  viewDistance* Math.Sin(angleZ);
+            double eyeZ = viewTarget.Z +  viewDistance* Math.Sin(angleZ);
             //double eyeZ = viewTarget.Z + viewDistance * Math.Sin(angleZ) * Math.Cos(angleXY);
-            double eyeZ = 0.0;
+            //double eyeZ = 3.0;
            
             GL.MatrixMode(MatrixMode.Projection);
 
@@ -106,9 +117,9 @@ namespace workshop17
             //view matrix
             //@ Linda, this matrix is where we're looking in from - you can change it up with all kinds of kewl functions
             //@ Linda, try uncommenting the second part of eyeZ above - wwwowow so swag
-            double sensitivity = 0.05;
-            double offsetX = (MouseX - lastX) * sensitivity;
-            double offsetY = (MouseY - lastY) * sensitivity;
+            double sensitivity = 0.5;
+            double offsetX = (mouseXnorm - lastX) * sensitivity;
+            double offsetY = (mouseYnorm - lastY) * sensitivity;
             lastX = MouseX;
             lastY = MouseY;
 
@@ -226,24 +237,53 @@ namespace workshop17
 
                 // @ Linda, try changing this up
                 // @jacques -- trying to incorporate the spiral with the input wave 
-                GL.Color4(1.0, 1.0, 1.0, 1.0);
-                double a = 0.4;
-                //double t = Math.Floor(time / 2);
-                double spiralTime = time - 3.0;
-                GL.Begin(PrimitiveType.Points);
-                for (int i = 0; i < 360; i++)
-                {
-                    double t = Math.PI / 180 * i * spiralTime;
-                    // double inradians = Math.PI/180 * i * time;
-                    double spiralX = radius * Math.Cos(t) / Math.Sqrt(a * a * t * t + 1);
-                    double spiralY = radius * Math.Sin(t) / Math.Sqrt(a * a * t * t + 1);
-                    double spiralZ = a * radius * t / Math.Sqrt(a * a * t * t + 1);
-                    GL.Vertex3(spiralX, spiralY, spiralZ * Mic.WaveLeft[i]);
 
-                    // @ jacques -- I think we need to calculate the normal vector to find the 
-                    //              x, y, and z displacements that respond to the input
+                if (state == 0)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double a = Mic.AverageVolume * 20.0;
+                    //double t = Math.Floor(time / 2);
+                    double spiralTime = time - 5.0;
+                    GL.Begin(PrimitiveType.LineStrip);
+                    int points = Mic.WaveLeft.Count * 2;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;// *Math.Sin(spiralTime);
+                        // double inradians = Math.PI/180 * i * time;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
+                        //GL.Vertex3(spiralX, spiralY, spiralZ);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+
+                        // @ jacques -- I think we need to calculate the normal vector to find the 
+                        //              x, y, and z displacements that respond to the input
+                    }
+                    GL.End();
                 }
-                GL.End();
+                else if (state == 1)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double a = Mic.AverageVolume * 20.0;
+                    //double t = Math.Floor(time / 2);
+                    double spiralTime = time - 5.0;
+                    GL.Begin(PrimitiveType.LineStrip);
+                    int points = Mic.WaveLeft.Count * 2;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;// *Math.Sin(spiralTime);
+                        // double inradians = Math.PI/180 * i * time;
+                        double spiralX = radius * Math.Cos(t) * Math.Sin(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Tan(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
+                        //GL.Vertex3(spiralX, spiralY, spiralZ);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+
+                        // @ jacques -- I think we need to calculate the normal vector to find the 
+                        //              x, y, and z displacements that respond to the input
+                    }
+                    GL.End();
+                }
 
                 /*
                 // @ jacques -- trying to incorporate the input data... 
@@ -309,7 +349,7 @@ namespace workshop17
                     GL.Vertex3(Math.Cos(inradians) * radius, Math.Sin(inradians) * radius, Mic.WaveLeft[i] * 5.0);
                 }
                 GL.End(); */
-
+                /*
                 GL.Color4(0.0, 0.5, 0.0, 0.5);
                 GL.Begin(PrimitiveType.LineStrip);
                 for (int i = 0; i < 360; i++)
@@ -340,7 +380,7 @@ namespace workshop17
                     GL.Vertex3(Math.Cos(inradians) * radius, Math.Sin(inradians) * radius, Mic.WaveLeft[i] * 5.0);
                 }
                 GL.End();   
-               
+               */
              
             } 
             
