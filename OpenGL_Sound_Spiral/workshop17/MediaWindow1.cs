@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 using C_sawapan_media;
 using OpenTK.Graphics.OpenGL;
@@ -55,6 +56,9 @@ namespace workshop17
 
         double viewDistance = 10.0;
 
+        double lastX = 0.0;
+        double lastY = 0.0;
+
         Vector3d viewTarget = new Vector3d(0.0, 0.0, 0.0);
 
        
@@ -83,12 +87,12 @@ namespace workshop17
             // represent cartesian coordinates of the spherical coordinates passed in
             double eyeX = viewTarget.X + viewDistance * Math.Cos(angleXY)*Math.Cos(angleZ);
             double eyeY = viewTarget.Y + viewDistance * Math.Sin(angleXY)*Math.Cos(angleZ);
-            //double eyeX = MouseX;
-            //double eyeY = MouseY;
+            //double eyeX = 0.0;
+            //double eyeY = 0.0;
             
-            double eyeZ = viewTarget.Z +  viewDistance* Math.Sin(angleZ);
+            //double eyeZ = viewTarget.Z +  viewDistance* Math.Sin(angleZ);
             //double eyeZ = viewTarget.Z + viewDistance * Math.Sin(angleZ) * Math.Cos(angleXY);
-            // double eyeZ = (MouseX + MouseY)/2;
+            double eyeZ = 0.0;
            
             GL.MatrixMode(MatrixMode.Projection);
 
@@ -102,7 +106,17 @@ namespace workshop17
             //view matrix
             //@ Linda, this matrix is where we're looking in from - you can change it up with all kinds of kewl functions
             //@ Linda, try uncommenting the second part of eyeZ above - wwwowow so swag
-            Matrix4d look = Matrix4d.LookAt(eyeX, eyeY, eyeZ, viewTarget.X, viewTarget.Y,  viewTarget.Z, 0.0, 0.0, 1.0);
+            double sensitivity = 0.05;
+            double offsetX = (MouseX - lastX) * sensitivity;
+            double offsetY = (MouseY - lastY) * sensitivity;
+            lastX = MouseX;
+            lastY = MouseY;
+
+            // ... @jacques -- flipping the Matrix4d look fucntion to the one underneath it flips the camera perspective
+            //viewTarget.X = offsetX;
+            //viewTarget.Y = offsetY;
+             Matrix4d look = Matrix4d.LookAt(eyeX, eyeY, eyeZ, viewTarget.X, viewTarget.Y,  viewTarget.Z, 0.0, 0.0, 1.0);
+            // Matrix4d look = Matrix4d.LookAt(viewTarget.X, viewTarget.Y, viewTarget.Z, eyeX, eyeY, eyeZ, 0.0, 0.0, 1.0);
             GL.LoadMatrix(ref look);
             
             GL.Color4(0.0, 0.0, 0.0, 1.0);
@@ -163,30 +177,33 @@ namespace workshop17
             GL.End();
 
             
-
+            
             // ..............................................  draw an awesome circle with Math - wowow
             //......@Linda - have a look at this part first
+            // .....@Jacques -- i got it to work one half at a time -- still a bit unsure how to connect
+            // ..... the two halves together. but they're in point form yay!
 
 
-            
+            /*
             GL.Color4(1.0, 1.0, 1.0, 1.0);
-            double radius = 1.0;
-            GL.Begin(PrimitiveType.LineStrip);
-            double spiralZ = -1.0;
+            double radius = 2.0;
+            double a = 0.4;
+            //double t = Math.Floor(time / 2);
+            double spiralTime = time - 3.0;
+            GL.Begin(PrimitiveType.Points);
             for (int i = 0; i < 360; i++)
             {
-                double inradians = Math.PI/180 * i;
-                double spiralC = Math.Atan(radius * inradians);
-                double spiralX = Math.Cos(inradians) * Math.Cos(spiralC);
-                double spiralY = Math.Sin(inradians) * Math.Cos(spiralC);
-                spiralZ = -1.0 * Math.Sin(spiralC);
-                //spiralZ = (spiralZ + inradians / 1000 < radius) ? spiralZ + inradians / 1000 : radius;
+                double t = Math.PI / 180 * i * spiralTime;
+                // double inradians = Math.PI/180 * i * time;
+                double spiralX = radius * Math.Cos(t) / Math.Sqrt(a * a * t * t + 1);
+                double spiralY = radius * Math.Sin(t) / Math.Sqrt(a * a * t * t + 1);
+                double spiralZ = a * radius * t / Math.Sqrt(a * a * t * t + 1);
                 GL.Vertex3(spiralX, spiralY, spiralZ);
             }
             GL.End(); 
-            
+            */
 
-            /*
+            
             // ..............................................  the awesome circle can oscilate with Math - wowow
             // @ Linda - it's about to get 2kewl4skewl
             double radius = 2.0;
@@ -204,15 +221,94 @@ namespace workshop17
                 double analysisDuration = (double)size / (double)Mic.SamplesPerSecond;
                 dx = 5.0 / (double)size;
 
+                Console.WriteLine(Mic.WaveLeft[0]);
+                Console.WriteLine(Mic.WaveLeft[1]);
+
                 // @ Linda, try changing this up
+                // @jacques -- trying to incorporate the spiral with the input wave 
                 GL.Color4(1.0, 1.0, 1.0, 1.0);
+                double a = 0.4;
+                //double t = Math.Floor(time / 2);
+                double spiralTime = time - 3.0;
+                GL.Begin(PrimitiveType.Points);
+                for (int i = 0; i < 360; i++)
+                {
+                    double t = Math.PI / 180 * i * spiralTime;
+                    // double inradians = Math.PI/180 * i * time;
+                    double spiralX = radius * Math.Cos(t) / Math.Sqrt(a * a * t * t + 1);
+                    double spiralY = radius * Math.Sin(t) / Math.Sqrt(a * a * t * t + 1);
+                    double spiralZ = a * radius * t / Math.Sqrt(a * a * t * t + 1);
+                    GL.Vertex3(spiralX, spiralY, spiralZ * Mic.WaveLeft[i]);
+
+                    // @ jacques -- I think we need to calculate the normal vector to find the 
+                    //              x, y, and z displacements that respond to the input
+                }
+                GL.End();
+
+                /*
+                // @ jacques -- trying to incorporate the input data... 
+                //..........................................Frequency spectrum
+
+                List<double> Real = new List<double>(size);
+                List<double> Imaginary = new List<double>(size);
+
+                List<double> abs2 = new List<double>(size);
+
+                for (int k = 0; k < size; ++k)
+                {
+                    Real.Add(MediaIO.SoundIn.WaveLeft[k]);
+                    Imaginary.Add(0.0);
+                }
+                fft.ForwardTransform(ref Real, ref Imaginary);
+
+
+                //compute magnitude for each frequency
+                for (int k = 0; k < size; ++k)
+                {
+                    abs2.Add(Real[k] * Real[k] + Imaginary[k] * Imaginary[k]);
+                }
+
+
+                int maxFreqIndex = 1; //skip first frequency as it corresponds to the average volume
+                for (int k = 1; k < size / 2; ++k)
+                {
+                    if (abs2[k] > abs2[maxFreqIndex])
+                    {
+                        maxFreqIndex = k;
+                    }
+                }
+
+                double maxFreqHz = maxFreqIndex / analysisDuration;
+                double maxPianoKey = 49.0 + 12.0 * Math.Log(maxFreqHz / 440.0) / Math.Log(2.0);
+
+                PianoKeyHistory.Add(maxPianoKey);
+                if (PianoKeyHistory.Count > 200) PianoKeyHistory.RemoveAt(0);
+
+                Console.WriteLine(maxFreqHz + "Hz , Piano Key:" + maxPianoKey);
+
+
+                dx = Width / (double)VolumeHistory.Count;
+                GL.Color4(0.0, 0.0, 0.0, 1.0);
+
+                for (int k = 0; k < PianoKeyHistory.Count; ++k)
+                {
+                    GL.PointSize((float)(VolumeHistory[k] * 100.0));
+                    GL.Begin(PrimitiveType.Points);
+                    GL.Vertex2(k * dx, 300.0 + PianoKeyHistory[k] * 3.0);
+                    GL.End();
+                }
+                */
+
+
+
+                /* // normal white wave input circle
                 GL.Begin(PrimitiveType.LineStrip);
-                for (int i = 0; i < 3600; i++)
+                for (int i = 0; i < 360; i++)
                 {
                     double inradians = Math.PI / 180 * (i/10);
                     GL.Vertex3(Math.Cos(inradians) * radius, Math.Sin(inradians) * radius, Mic.WaveLeft[i] * 5.0);
                 }
-                GL.End();
+                GL.End(); */
 
                 GL.Color4(0.0, 0.5, 0.0, 0.5);
                 GL.Begin(PrimitiveType.LineStrip);
@@ -224,6 +320,8 @@ namespace workshop17
                 GL.End();
 
 
+
+
                 GL.Color4(1.0, 0.0, 0.5, 0.3);
                 GL.Begin(PrimitiveType.LineStrip);
                 for (int i = 0; i < 180; i++)
@@ -233,6 +331,7 @@ namespace workshop17
                 }
                 GL.End();
 
+                
                 GL.Color4(0.5, 0.5, 0.5, 0.5);
                 GL.Begin(PrimitiveType.LineStrip);
                 for (int i = 0; i < 90; i++)
@@ -240,11 +339,11 @@ namespace workshop17
                     double inradians = Math.PI / 180 * (i * 4);
                     GL.Vertex3(Math.Cos(inradians) * radius, Math.Sin(inradians) * radius, Mic.WaveLeft[i] * 5.0);
                 }
-                GL.End();  
+                GL.End();   
                
              
             } 
-            */
+            
             
             // ........................... make a spherical point cloud
 
@@ -394,134 +493,134 @@ namespace workshop17
             }*/
 
             //.............................Real time mic input Analysis
-            
-           /*
-          if (MediaIO.SoundIn.Listening)
-            {
-                MediaIO.SoundIn.GetLatestSample();
 
-                SoundIN Mic = MediaIO.SoundIn;
+            /*
+           if (MediaIO.SoundIn.Listening)
+             {
+                 MediaIO.SoundIn.GetLatestSample();
 
-                int size = Mic.WaveLeft.Count/2; //we'll just use half of the recorded sample to improve performance
-                double analysisDuration = (double)size / (double)Mic.SamplesPerSecond;
-                dx = 5.0 / (double)size;
+                 SoundIN Mic = MediaIO.SoundIn;
+
+                 int size = Mic.WaveLeft.Count/2; //we'll just use half of the recorded sample to improve performance
+                 double analysisDuration = (double)size / (double)Mic.SamplesPerSecond;
+                 dx = 5.0 / (double)size;
 
                 
-                // Pan's wave
-                //draw input waveform
-                GL.Color4(1.0, 1.0, 1.0, 1.0);
-                GL.Begin(PrimitiveType.LineStrip);
-                for (int k = 0; k < size; ++k)
-                {
-                    GL.Vertex3(k * dx,0.0,  Mic.WaveLeft[k] * 10.0);
-                }
-                GL.End();
+                 // Pan's wave
+                 //draw input waveform
+                 GL.Color4(1.0, 1.0, 1.0, 1.0);
+                 GL.Begin(PrimitiveType.LineStrip);
+                 for (int k = 0; k < size; ++k)
+                 {
+                     GL.Vertex3(k * dx,0.0,  Mic.WaveLeft[k] * 10.0);
+                 }
+                 GL.End();
 
-                //find maximum and average volume in current sample
-                double MaxVolume = 0.0;
-                double AvgVolume = 0.0;
-                for (int k = size-1000; k < size; ++k)
-                {
-                    double v = Math.Abs(Mic.WaveLeft[k]);
-                    if (v > MaxVolume)
-                        MaxVolume = v;
+                 //find maximum and average volume in current sample
+                 double MaxVolume = 0.0;
+                 double AvgVolume = 0.0;
+                 for (int k = size-1000; k < size; ++k)
+                 {
+                     double v = Math.Abs(Mic.WaveLeft[k]);
+                     if (v > MaxVolume)
+                         MaxVolume = v;
 
-                    AvgVolume += v;
-                }
+                     AvgVolume += v;
+                 }
 
-                AvgVolume /= 999.0;
+                 AvgVolume /= 999.0;
 
-                //append current maximum volume to history list
-                VolumeHistory.Add( MaxVolume);
-                if (VolumeHistory.Count > 200) VolumeHistory.RemoveAt(0);
+                 //append current maximum volume to history list
+                 VolumeHistory.Add( MaxVolume);
+                 if (VolumeHistory.Count > 200) VolumeHistory.RemoveAt(0);
 
-                //draw volume variation for the past 200 samples
-                dx = Width / (double)VolumeHistory.Count;
-                GL.Color4(0.0, 1.0, 1.0, 1.0);
-                GL.Begin(PrimitiveType.LineStrip);
-                for (int k = 0; k < VolumeHistory.Count; ++k)
-                {
-                    GL.Vertex2( k * dx, 300.0+VolumeHistory[k] * 200.0);
-                }
-                GL.End();
+                 //draw volume variation for the past 200 samples
+                 dx = Width / (double)VolumeHistory.Count;
+                 GL.Color4(0.0, 1.0, 1.0, 1.0);
+                 GL.Begin(PrimitiveType.LineStrip);
+                 for (int k = 0; k < VolumeHistory.Count; ++k)
+                 {
+                     GL.Vertex2( k * dx, 300.0+VolumeHistory[k] * 200.0);
+                 }
+                 GL.End();
 
-                //..........................................Frequency spectrum
+                 //..........................................Frequency spectrum
 
-                List<double> Real=new List<double>(size);
-                List<double> Imaginary=new List<double>(size);
+                 List<double> Real=new List<double>(size);
+                 List<double> Imaginary=new List<double>(size);
 
-                List<double> abs2 = new List<double>(size);
+                 List<double> abs2 = new List<double>(size);
                
-                for (int k = 0; k < size; ++k)
-                {
-                    Real.Add(MediaIO.SoundIn.WaveLeft[k]);
-                    Imaginary.Add(0.0);
-                }
-                fft.ForwardTransform(ref Real, ref Imaginary);
+                 for (int k = 0; k < size; ++k)
+                 {
+                     Real.Add(MediaIO.SoundIn.WaveLeft[k]);
+                     Imaginary.Add(0.0);
+                 }
+                 fft.ForwardTransform(ref Real, ref Imaginary);
 
-
-                //compute magnitude for each frequency
-                for (int k = 0; k < size; ++k)
-                {
-                    abs2.Add(Real[k] * Real[k] + Imaginary[k] * Imaginary[k]);
-                }
-
-
-                //draw power spectrum
-                dx = Width / (double)size;
-                GL.Color4(0.0, 0.0, 0.0, 0.5);
-                GL.Begin(PrimitiveType.LineStrip);
-                for (int k = 0; k < size/2; ++k)
-                {
-                    GL.Vertex2(2.0*k * dx, 20.0+abs2[k] * 0.1);
-                }
-                GL.End();
-
-
-                int maxFreqIndex = 1; //skip first frequency as it corresponds to the average volume
-                for (int k = 1; k < size / 2; ++k)
-                {
-                   if (abs2[k]>abs2[maxFreqIndex])
-                    {
-                        maxFreqIndex = k;
-                    }
-                }
-
-                double maxFreqHz = maxFreqIndex / analysisDuration;
-                double maxPianoKey = 49.0 + 12.0 * Math.Log(maxFreqHz / 440.0) / Math.Log(2.0);
-
-                PianoKeyHistory.Add(maxPianoKey);
-                if (PianoKeyHistory.Count > 200) PianoKeyHistory.RemoveAt(0);
-
-                Console.WriteLine(maxFreqHz + "Hz , Piano Key:"+maxPianoKey);
-
-
-                dx = Width / (double)VolumeHistory.Count;
-                GL.Color4(0.0, 0.0, 0.0, 1.0);
                 
-                for (int k = 0; k < PianoKeyHistory.Count; ++k)
-                {
-                    GL.PointSize((float)(VolumeHistory[k]*100.0));
-                    GL.Begin(PrimitiveType.Points);
-                    GL.Vertex2(k * dx, 300.0 + PianoKeyHistory[k] * 3.0);
-                    GL.End();
-                }
-               
-                //alternative visualization in log scale corresponding to piano notes
-                dx =  Width / 200.0;
-                GL.Color4(0.0, 0.0, 0.0, 1.0);
-                GL.Begin(PrimitiveType.LineStrip);
-                int nstep = 1;
-                for (int k = 1; k < 200; k+=nstep)
-                {
-                    double nv = MediaIO.SoundIn.NoteBandVolume((k*0.5 - nstep*0.5), (k*0.5+nstep*0.5));
-                    GL.Vertex2(k * dx , 200.0 + nv* 20000.0);    
+                 //compute magnitude for each frequency
+                 for (int k = 0; k < size; ++k)
+                 {
+                     abs2.Add(Real[k] * Real[k] + Imaginary[k] * Imaginary[k]);
+                 }
 
-                }
-                GL.End();
-            }
+
+                 //draw power spectrum
+                 dx = Width / (double)size;
+                 GL.Color4(0.0, 0.0, 0.0, 0.5);
+                 GL.Begin(PrimitiveType.LineStrip);
+                 for (int k = 0; k < size/2; ++k)
+                 {
+                     GL.Vertex2(2.0*k * dx, 20.0+abs2[k] * 0.1);
+                 }
+                 GL.End();
+
+
+                 int maxFreqIndex = 1; //skip first frequency as it corresponds to the average volume
+                 for (int k = 1; k < size / 2; ++k)
+                 {
+                    if (abs2[k]>abs2[maxFreqIndex])
+                     {
+                         maxFreqIndex = k;
+                     }
+                 }
+
+                 double maxFreqHz = maxFreqIndex / analysisDuration;
+                 double maxPianoKey = 49.0 + 12.0 * Math.Log(maxFreqHz / 440.0) / Math.Log(2.0);
+
+                 PianoKeyHistory.Add(maxPianoKey);
+                 if (PianoKeyHistory.Count > 200) PianoKeyHistory.RemoveAt(0);
+
+                 Console.WriteLine(maxFreqHz + "Hz , Piano Key:"+maxPianoKey);
+
+
+                 dx = Width / (double)VolumeHistory.Count;
+                 GL.Color4(0.0, 0.0, 0.0, 1.0);
+                
+                 for (int k = 0; k < PianoKeyHistory.Count; ++k)
+                 {
+                     GL.PointSize((float)(VolumeHistory[k]*100.0));
+                     GL.Begin(PrimitiveType.Points);
+                     GL.Vertex2(k * dx, 300.0 + PianoKeyHistory[k] * 3.0);
+                     GL.End();
+                 }
+               
+                 //alternative visualization in log scale corresponding to piano notes
+                 dx =  Width / 200.0;
+                 GL.Color4(0.0, 0.0, 0.0, 1.0);
+                 GL.Begin(PrimitiveType.LineStrip);
+                 int nstep = 1;
+                 for (int k = 1; k < 200; k+=nstep)
+                 {
+                     double nv = MediaIO.SoundIn.NoteBandVolume((k*0.5 - nstep*0.5), (k*0.5+nstep*0.5));
+                     GL.Vertex2(k * dx , 200.0 + nv* 20000.0);    
+
+                 }
+                 GL.End();
+             }
             
-            * */
+             * */
 
             /*
             //........................................................Frequency synthesis
