@@ -76,15 +76,20 @@ namespace workshop17
             time += 0.1;
 
             angleXY = time;
+            //angleXY = MouseX;
             angleZ = Math.PI*0.1;
             //angleZ = Math.Cos(time)*Math.PI*0.4;
+            //angleZ = MouseY;
 
-
+            // represent cartesian coordinates of the spherical coordinates passed in
             double eyeX = viewTarget.X + viewDistance * Math.Cos(angleXY)*Math.Cos(angleZ);
             double eyeY = viewTarget.Y + viewDistance * Math.Sin(angleXY)*Math.Cos(angleZ);
+            //double eyeX = MouseX;
+            //double eyeY = MouseY;
+            
             double eyeZ = viewTarget.Z +  viewDistance* Math.Sin(angleZ);
             //double eyeZ = viewTarget.Z + viewDistance * Math.Sin(angleZ) * Math.Cos(angleXY);
-
+            // double eyeZ = (MouseX + MouseY)/2;
            
             GL.MatrixMode(MatrixMode.Projection);
 
@@ -156,31 +161,37 @@ namespace workshop17
             {
                 GL.Vertex3(vertexarray[i], vertexarray[i + 1], vertexarray[i + 2]);
             }
+            GL.End();
 
-
-                GL.End();
-
-            GL.Color4(1.0, 1.0, 1.0, 1.0);
+            
 
             // ..............................................  draw an awesome circle with Math - wowow
             //......@Linda - have a look at this part first
+
+
             
-            /*
+            GL.Color4(1.0, 1.0, 1.0, 1.0);
             double radius = 1.0;
             GL.Begin(PrimitiveType.LineStrip);
-            for (int i = 0; i < 360; i++)
+            double spiralZ = -1.0;
+            for (int i = 0; i < 3600; i++)
             {
-                double inradians = Math.PI / 180 * i;
-                GL.Vertex3(Math.Cos(inradians) * radius, Math.Sin(inradians) * radius, 0.0);
+                double inradians = Math.PI/180 * i;
+                double spiralC = Math.Atan(radius * inradians);
+                double spiralX = Math.Cos(inradians) * Math.Cos(spiralC);
+                double spiralY = Math.Sin(inradians) * Math.Cos(spiralC);
+                spiralZ = -1.0 * Math.Sin(spiralC);
+                //spiralZ = (spiralZ + inradians / 1000 < radius) ? spiralZ + inradians / 1000 : radius;
+                GL.Vertex3(spiralX, spiralY, spiralZ);
             }
-            GL.End();
-           */
+            GL.End(); 
+            
 
             /*
             // ..............................................  the awesome circle can oscilate with Math - wowow
             // @ Linda - it's about to get 2kewl4skewl
             double radius = 2.0;
-            GL.Begin(PrimitiveType.LineStrip);
+            //GL.Begin(PrimitiveType.LineStrip);
 
             if (MediaIO.SoundIn.Listening)
             {
@@ -188,11 +199,14 @@ namespace workshop17
 
                 SoundIN Mic = MediaIO.SoundIn;
 
-                int size = Mic.WaveLeft.Count / 2; //we'll just use half of the recorded sample to improve performance
+                int size = Mic.WaveLeft.Count / 2; 
+                //we'll just use half of the recorded sample to improve performance
+                // we still have latency? how to fix?
                 double analysisDuration = (double)size / (double)Mic.SamplesPerSecond;
                 dx = 5.0 / (double)size;
 
                 // @ Linda, try changing this up
+                GL.Color4(1.0, 1.0, 1.0, 1.0);
                 GL.Begin(PrimitiveType.LineStrip);
                 for (int i = 0; i < 3600; i++)
                 {
@@ -202,7 +216,6 @@ namespace workshop17
                 GL.End();
 
                 GL.Color4(0.0, 0.5, 0.0, 0.5);
-
                 GL.Begin(PrimitiveType.LineStrip);
                 for (int i = 0; i < 360; i++)
                 {
@@ -221,20 +234,22 @@ namespace workshop17
                 }
                 GL.End();
 
-                /*
+                GL.Color4(0.5, 0.5, 0.5, 0.5);
+                GL.Begin(PrimitiveType.LineStrip);
                 for (int i = 0; i < 90; i++)
                 {
                     double inradians = Math.PI / 180 * (i * 4);
                     GL.Vertex3(Math.Cos(inradians) * radius, Math.Sin(inradians) * radius, Mic.WaveLeft[i] * 5.0);
                 }
+                GL.End();  
                
              
-            }
-           */
+            } 
+            */
             
             // ........................... make a spherical point cloud
 
-            /*
+            /* 
             // @Linda- can you try to get this array implemented outside of this function so that these points are permanently visible?
             // first, we need to generate a metric fuckton of indiviual points
             int spherenum = 1000;
@@ -250,6 +265,7 @@ namespace workshop17
             double y = 0.0;
             double z = 0.0;
 
+            GL.Color4(1.0, 1.0, 1.0, 1.0);
             GL.Begin(PrimitiveType.Points);
             for (int i = 0; i < spherenum; i++)
             {
@@ -262,8 +278,8 @@ namespace workshop17
                 GL.Vertex3(x, y, z);
             }
                 
-            GL.End();
-            */
+            GL.End(); */
+            
 
             
             /*
@@ -328,7 +344,7 @@ namespace workshop17
             }
              */
             
-            
+            /*
             //...........................................Envelope
             if (!Sound1.IsPlaying)
              {
@@ -352,7 +368,7 @@ namespace workshop17
 
                  Sound1.SetWaveFormD(Wave1);
                  Sound1.Play(false);
-             }
+             } */
             
 
             //...........................................wave addition
@@ -564,7 +580,7 @@ namespace workshop17
                  Sound1.Play(false);
              }*/
 
-            
+            /*
             //......................................................Draw Wave1
             dx = Width / (double)Wave1.GetLength(0);
             GL.Color4(1.0, 0.0, 0.5, 0.3);
@@ -581,7 +597,7 @@ namespace workshop17
             {
                 GL.Vertex3(k * dx, Height * 0.3 - Wave1[k, 1] * 200.0, dx);
             }
-            GL.End();
+            GL.End(); */
            
             /*
             //...............................................Wave file
@@ -610,8 +626,8 @@ namespace workshop17
             }
             GL.End();
             */
-            
 
+            // GL.End();
         }
 
         /*
@@ -621,6 +637,7 @@ namespace workshop17
         }
         */
         
+        // making a randomization function 
         private int Random()
         {
             Random random = new Random();
