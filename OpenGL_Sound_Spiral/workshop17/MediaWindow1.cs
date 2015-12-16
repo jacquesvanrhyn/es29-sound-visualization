@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 using C_sawapan_media;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
@@ -174,7 +173,7 @@ namespace workshop17
             double radius = 1.0;
             GL.Begin(PrimitiveType.LineStrip);
             double spiralZ = -1.0;
-            for (int i = 0; i < 360000; i++)
+            for (int i = 0; i < 360; i++)
             {
                 double inradians = Math.PI/180 * i;
                 double spiralC = Math.Atan(radius * inradians);
