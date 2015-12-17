@@ -175,6 +175,7 @@ namespace workshop17
             else if (state == 13)
             {
                 angleXY = time;
+                angleZ = 0;
             }
             else if (state == 14)
             {
@@ -193,7 +194,7 @@ namespace workshop17
             // represent cartesian coordinates of the spherical coordinates passed in
             double eyeX = viewTarget.X + viewDistance * Math.Cos(angleXY)*Math.Cos(angleZ);
             double eyeY = viewTarget.Y + viewDistance * Math.Sin(angleXY)*Math.Cos(angleZ);  
-            double eyeZ = viewTarget.Z +  viewDistance* Math.Sin(angleZ);
+            double eyeZ = viewTarget.Z + viewDistance * Math.Sin(angleZ);
         
             GL.MatrixMode(MatrixMode.Projection);
 
@@ -285,42 +286,27 @@ namespace workshop17
                     }
                     GL.End();
 
-                    GL.Color4(0.0, 0.0, 0.0, 1.0);
-                    GL.Begin(PrimitiveType.Lines);
-                    for (int i = 0; i < 72; i = i + 3)
-                    {
-                        GL.Vertex3(vertexarray[i], vertexarray[i + 1], vertexarray[i + 2]);
-                    }
-                    GL.End();
                 }
                 else if (state == 3)
                 {
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
-                    double a = Mic.AverageVolume * 20.0;
-                    //double t = Math.Floor(time / 2);
+                    double a = Mic.AverageVolume * 100.0;
                     double spiralTime = time - 5.0;
-                    GL.PointSize((float)radius);
+                    GL.PointSize((float)a);
                     GL.Begin(PrimitiveType.Points);
                     
-                    int points = Mic.WaveLeft.Count / 10;
+                    int points = Mic.WaveLeft.Count / 5;
                     for (int i = 0; i < points; i++)
                     {
-                        double t = 30.0 * (Math.PI / (double)points) * i * Math.Sin(spiralTime);
-                        double spiralX = radius * Math.Cos(t) * Math.Sin(a * t);
-                        double spiralY = radius * Math.Sin(t) * Math.Tan(a * t);
-                        double spiralZ = radius * Math.Sin(a * t);
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t);
+                        double spiralY = radius * Math.Sin(t);
+                        double spiralZ = radius * Math.Tan(a * t);
                         GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
                         
                     }
                     GL.End();
 
-                    GL.Color4(0.0, 0.0, 0.0, 1.0);
-                    GL.Begin(PrimitiveType.Lines);
-                    for (int i = 0; i < 72; i = i + 3)
-                    {
-                        GL.Vertex3(vertexarray[i], vertexarray[i + 1], vertexarray[i + 2]);
-                    }
-                    GL.End();
                 }
                 else if (state == 4)
                 {

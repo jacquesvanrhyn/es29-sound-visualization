@@ -36,13 +36,13 @@ namespace workshop17
         void nextButton_Click(object sender, EventArgs e)
         {
             mediawin.state++;
-            if (mediawin.state > 16) mediawin.state = 0;
+            if (mediawin.state > 15) mediawin.state = 0;
         }
 
         void prevButton_Click(object sender, EventArgs e)
         {
             mediawin.state--;
-            if (mediawin.state <= 0) mediawin.state = 16;
+            if (mediawin.state < 0) mediawin.state = 15;
         }
 
         private void GlControl1_MouseMove(object sender, MouseEventArgs e)
