@@ -99,7 +99,7 @@ namespace workshop17
             if (mouseYnorm < 0.0) mouseYnorm = 0.0;
 
             // comment the part below out when not testing
-            state = 5;
+            // state = 5;
 
             if (state==0)
             GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
@@ -381,6 +381,104 @@ namespace workshop17
                     }
                     GL.End();
                 }
+                else if (state == 11)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double a = Mic.MaxFrequencyHz * 20.0;
+                    double spiralTime = time - 5.0;
+                    GL.LineWidth((float)0.1);
+                    GL.Begin(PrimitiveType.Lines);
+                    int points = Mic.WaveLeft.Count / 10;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    a = Mic.PeakFrequencyHz * 20.0;
+                    GL.Begin(PrimitiveType.Points);
+                    for (int i = 0; i < points * 2; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralY = radius * Math.Cos(t) * Math.Cos(a * t);
+                        double spiralZ = radius * Math.Sin(t) * Math.Cos(a * t);
+                        double spiralX = radius * Math.Sin(a * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+                }
+                else if (state == 13)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 0.05);
+                    double c = Mic.PeakVolume * 20.0;
+                    double b = Mic.PeakFrequencyHz * 20.0;
+                    double a = Mic.PeakNote * 20.0;
+                    double spiralTime = time - 5.0;
+
+                    GL.Begin(PrimitiveType.Triangles);
+                    int points = Mic.WaveLeft.Count / 300;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos((a + b) * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos((a + b) * t);
+                        double spiralZ = radius * Math.Sin(c * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    GL.LineWidth((float)0.1);
+                    GL.Begin(PrimitiveType.LineStrip);
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos((a + b) * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos((a + b) * t);
+                        double spiralZ = radius * Math.Sin(c * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+                }
+                else if (state == 15)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double c = Mic.PeakVolume * 20.0;
+                    double b = Mic.PeakFrequencyHz * 20.0;
+                    double a = Mic.PeakNote * 20.0;
+                    double spiralTime = time - 5.0;
+                    GL.LineWidth((float)0.1);
+                    GL.Begin(PrimitiveType.Points);
+                    int points = Mic.WaveLeft.Count / 10;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+
+                    // dominant tone? 
+                    double maxPianoKey = 49.0 + 12.0 * Math.Log(Mic.MaxFrequencyHz / 440.0) / Math.Log(2.0);
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    GL.Begin(PrimitiveType.Lines);
+                    for (int i = 0; i < points / 10; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos(maxPianoKey * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos(maxPianoKey * t);
+                        double spiralZ = radius * Math.Sin(maxPianoKey * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+                }
 
                 /*
                 // @ jacques -- trying to incorporate the input data... 
@@ -535,99 +633,8 @@ namespace workshop17
             GL.End();
             */
 
-            /*
-            //...........................................A simple tone
-            if (!Sound1.IsPlaying)
-            {
-                double fr = 440.0; //frequency of tone to generate in Hz
-                double duration = Sound1.DurationSec; //overall duration of sound sample sec
-                double dt = 1.0 / Sound1.SamplesPerSecond; //duration of a single sample point in seconds
-                double PI2 = Math.PI * 2.0;
-
-                for (int k = 0; k < Wave1.GetLength(0); ++k)
-                {
-                    double t = k * dt;
-                    Wave1[k, 0] = 0.3 * Math.Cos(t * fr * PI2);
-                    Wave1[k, 1] = 0.3 * Math.Cos(t * fr * PI2);
-                }
-
-                Sound1.SetWaveFormD(Wave1);
-                Sound1.Play(false);
-            }
-             */
 
 
-
-            /*
-            //...........................................A simple tone interactive [pan, freq]
-           if (!Sound1.IsPlaying)
-            {
-                double fr = 100+mouseYnorm*500; //frequency of tone to generate in Hz
-                double duration = Sound1.DurationSec; //overall duration of sound sample sec
-                double dt = 1.0 / Sound1.SamplesPerSecond; //duration of a single sample point in seconds
-                double PI2 = Math.PI * 2.0;
-
-                for (int k = 0; k < Wave1.GetLength(0); ++k)
-                {
-                    double t = k * dt;
-                    Wave1[k, 0] = mouseXnorm * Math.Cos(t * fr * PI2);
-                    Wave1[k, 1] = (1.0-mouseXnorm) * Math.Cos(t * fr * PI2);
-                }
-
-                Sound1.SetWaveFormD(Wave1);
-                Sound1.Play(false);
-            }
-             */
-            
-            /*
-            //...........................................Envelope
-            if (!Sound1.IsPlaying)
-             {
-                 double fr = 100 + mouseYnorm * 100; //frequency of tone to generate in Hz
-                 double duration = Sound1.DurationSec; //overall duration of sound sample sec
-                 double dt = 1.0 / Sound1.SamplesPerSecond; //duration of a single sample point in seconds
-                 double PI2 = Math.PI * 2.0;
-
-
-                 for (int k = 0; k < Wave1.GetLength(0); ++k)
-                 {
-                     double t = k * dt;
-                     //double env = t * 5.0;
-                     //double env = (t-0.5)*(t-0.5) * 5.0;
-                     double ddt=t-duration*0.5;
-                     double env = Math.Exp(-400.0*mouseXnorm*ddt*ddt);
-
-                     Wave1[k, 0] = 0.5 * Math.Cos(t * fr * PI2) * env;
-                     Wave1[k, 1] = 0.5 * Math.Cos(t * fr * PI2) * env;
-                 }
-
-                 Sound1.SetWaveFormD(Wave1);
-                 Sound1.Play(false);
-             } */
-            
-
-            //...........................................wave addition
-            /*if (!Sound1.IsPlaying)
-            {
-                double fr1 = 200; //frequency of tone to generate in Hz
-                double fr2 = 100 + mouseXnorm * 800; //frequency of tone to generate in Hz
-
-                double duration = Sound1.DurationSec; //overall duration of sound sample sec
-                double dt = 1.0 / Sound1.SamplesPerSecond; //duration of a single sample point in seconds
-                double PI2 = Math.PI * 2.0;
-
-
-                for (int k = 0; k < Wave1.GetLength(0); ++k)
-                {
-                    double t = k * dt;
-
-                    Wave1[k, 0] = 0.3 * Math.Cos(t * fr1 * PI2) + 0.5*mouseYnorm * Math.Cos(t * fr2 * PI2);
-                    Wave1[k, 1] = Wave1[k, 0];
-                }
-
-                Sound1.SetWaveFormD(Wave1);
-                Sound1.Play(false);
-            }*/
 
             //.............................Real time mic input Analysis
 
