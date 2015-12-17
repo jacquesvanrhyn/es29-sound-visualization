@@ -59,6 +59,33 @@ namespace workshop17
         Vector3d viewTarget = new Vector3d(0.0, 0.0, 0.0);
 
         public int state = 0;
+
+        double[] vertexarray = new double[72] {
+                                                 1.0, 1.0, 1.0, 
+                                                 1.0, -1.0, 1.0,
+                                                 1.0, -1.0, 1.0,
+                                                 -1.0, -1.0, 1.0,
+                                                 -1.0, -1.0, 1.0, 
+                                                 -1.0, 1.0, 1.0,
+                                                 -1.0, 1.0, 1.0,
+                                                 1.0, 1.0, 1.0,
+                                                 1.0, 1.0, -1.0, 
+                                                 1.0, -1.0, -1.0,
+                                                 1.0, -1.0, -1.0,
+                                                 -1.0, -1.0, -1.0,
+                                                 -1.0, -1.0, -1.0, 
+                                                 -1.0, 1.0, -1.0,
+                                                 -1.0, 1.0, -1.0,
+                                                 1.0, 1.0, -1.0,
+                                                 1.0, 1.0, 1.0,
+                                                 1.0, 1.0, -1.0,
+                                                 1.0, -1.0, 1.0,
+                                                 1.0, -1.0, -1.0,
+                                                 -1.0, -1.0, 1.0,
+                                                 -1.0, -1.0, -1.0,
+                                                 -1.0, 1.0, 1.0,
+                                                 -1.0, 1.0, -1.0
+                                                  };
        
         //animation function. This contains code executed 20 times per second.
         public void OnFrameUpdate()
@@ -72,7 +99,7 @@ namespace workshop17
             if (mouseYnorm < 0.0) mouseYnorm = 0.0;
 
             // comment the part below out when not testing
-            //state = 5;
+            state = 5;
 
             if (state==0)
             GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
@@ -115,49 +142,7 @@ namespace workshop17
             
             //creates a cube 
             
-            double[] vertexarray = new double[72] {
-                                                 1.0, 1.0, 1.0, 
-                                                 1.0, -1.0, 1.0,
-
-                                                 1.0, -1.0, 1.0,
-                                                 -1.0, -1.0, 1.0,
-
-                                                 -1.0, -1.0, 1.0, 
-                                                 -1.0, 1.0, 1.0,
-
-                                                 -1.0, 1.0, 1.0,
-                                                 1.0, 1.0, 1.0,
-
-
-
-                                                 1.0, 1.0, -1.0, 
-                                                 1.0, -1.0, -1.0,
-
-                                                 1.0, -1.0, -1.0,
-                                                 -1.0, -1.0, -1.0,
-
-                                                 -1.0, -1.0, -1.0, 
-                                                 -1.0, 1.0, -1.0,
-
-                                                 -1.0, 1.0, -1.0,
-                                                 1.0, 1.0, -1.0,
-
-
-
-                                                 1.0, 1.0, 1.0,
-                                                 1.0, 1.0, -1.0,
-
-                                                 1.0, -1.0, 1.0,
-                                                 1.0, -1.0, -1.0,
-
-                                                 
-                                                 -1.0, -1.0, 1.0,
-                                                 -1.0, -1.0, -1.0,
-
-                                                 -1.0, 1.0, 1.0,
-                                                 -1.0, 1.0, -1.0
-
-                                                  };
+            
 
             /*
             for (int i = 0; i < 72; i = i + 3)
@@ -300,30 +285,29 @@ namespace workshop17
                 }
                 else if (state == 5)
                 {
-                    GL.Color4(1.0, 1.0, 1.0, 1.0);
-                    double a = Mic.AverageVolume * 20.0;
-                    double spiralTime = time - 5.0;
-                    GL.PointSize((float)0.5);
-                    GL.Begin(PrimitiveType.Points);
-                    int points = Mic.WaveLeft.Count / 2;
-                    for (int i = 0; i < points; i++)
-                    {
-                        double t = 30.0 * (Math.PI / (double)points) * i;
-                        double spiralX = radius * Math.Cos(t) * Math.Sin(a * t * t);
-                        double spiralY = radius * Math.Sin(t) * Math.Tan(a * t * t);
-                        double spiralZ = radius * Math.Sin(a * t * t);
-                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
-                    }
-                    GL.End();
 
-                    GL.Color4(0.0, 0.0, 0.0, 1.0);
-                    GL.Begin(PrimitiveType.Lines);
-                    for (int i = 0; i < 72; i = i + 3)
-                    {
-                        GL.Vertex3(vertexarray[i], vertexarray[i + 1], vertexarray[i + 2]);
-                    }
+                    double b = 0.2;
+                    //double b = Mic.AverageVolume * 15.0;
+                    double offset = b + Mic.AverageVolume * 10.0;
+                    
+                    GL.Begin(PrimitiveType.LineLoop);
+                    GL.Vertex3(b, b, offset); GL.Vertex3(-b, b, offset); GL.Vertex3(-b, -b, offset); GL.Vertex3(b, -b, offset);
                     GL.End();
-
+                    GL.Begin(PrimitiveType.LineLoop);
+                    GL.Vertex3(b, b, -offset); GL.Vertex3(-b, b, -offset); GL.Vertex3(-b, -b, -offset); GL.Vertex3(b, -b, -offset);
+                    GL.End();
+                    GL.Begin(PrimitiveType.LineLoop);
+                    GL.Vertex3(b, -offset, b); GL.Vertex3(b, -offset, -b); GL.Vertex3(-b, -offset, -b); GL.Vertex3(-b, -offset, b);
+                    GL.End();
+                    GL.Begin(PrimitiveType.LineLoop);
+                    GL.Vertex3(b, offset, b); GL.Vertex3(b, offset, -b); GL.Vertex3(-b, offset, -b); GL.Vertex3(-b, offset, b);
+                    GL.End();
+                    GL.Begin(PrimitiveType.LineLoop);
+                    GL.Vertex3(offset, b, b); GL.Vertex3(offset, b, -b); GL.Vertex3(offset, -b, -b); GL.Vertex3(offset,- b, b);
+                    GL.End();
+                    GL.Begin(PrimitiveType.LineLoop);
+                    GL.Vertex3(-offset, b, b); GL.Vertex3(-offset, b, -b); GL.Vertex3(-offset, -b, -b); GL.Vertex3(-offset, -b, b);
+                    GL.End();
                 }
                 else if (state == 6)
                 {
