@@ -100,8 +100,7 @@ namespace workshop17
 
             // comment the part below out when not testing
             //state = 7;
-            // state = 14;
-
+            //state = 12;
             if (state==0)
             GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
             else if (state % 2 == 1)
@@ -170,7 +169,8 @@ namespace workshop17
             }
             else if (state == 12)
             {
-                angleXY = time;
+                angleZ = Math.PI / 5.0;
+                angleXY = time / 15.0;
             }
             else if (state == 13)
             {
@@ -225,8 +225,7 @@ namespace workshop17
                 double analysisDuration = (double)size / (double)Mic.SamplesPerSecond;
                 dx = 5.0 / (double)size;
 
-                // @ Linda, try changing this up
-                // @jacques -- trying to incorporate the spiral with the input wave 
+
 
                 if (state == 0)
                 {
@@ -482,6 +481,40 @@ namespace workshop17
                     }
                     GL.End();
                 }
+                else if (state == 12)
+                {
+                    //Here I want a "hairy" visualization
+                    int num = 10;
+                    int len = 5;
+                    double unit = 0.1;
+                    double zlength = 0.2;
+                    double xoffset = 0.0;
+                    double yoffset = 0.0;
+                    for (int i = -num; i < num; i++)
+                    {
+                        for (int j = -num; j < num; j++)
+                        {
+                            int r2 = i * i + j * j;
+                            if (r2 < num * num) {
+                                GL.Begin(PrimitiveType.LineStrip);
+                                for (int k = 0; k < len; k++)
+                                {
+                                    xoffset = (k * i * k / 1000.0) * Mic.AverageVolume * 50.0;
+                                    yoffset = (k * j * k / 1000.0) * Mic.AverageVolume * 50.0;
+
+                                    GL.Vertex3(i * unit + xoffset, j * unit + yoffset, k * zlength / (Mic.AverageVolume * 25.0));
+
+                                }
+                                GL.End();
+                            }
+
+                            
+
+                            //GL.Vertex3(i * unit + k/20.0, j * unit + k/20.0, k * zlength);
+                                    
+                        }
+                    }
+                }
                 else if (state == 13)
                 {
                     GL.Color4(1.0, 1.0, 1.0, 0.05);
@@ -518,8 +551,6 @@ namespace workshop17
                 else if (state == 14)
                 {
                     GL.Begin(PrimitiveType.Points);
-                    //int points = 100;
-                    //double max = 100.0;
                     double unit = .15;
                     int boxsize = 10;
                     for (int h = -boxsize; h < boxsize; h++)
@@ -528,7 +559,7 @@ namespace workshop17
                         {
                             for (int j = -boxsize; j < boxsize; j++)
                             {
-                                GL.Vertex3( i * unit,  j * unit, h * unit * Mic.AverageVolume * 100.0);
+                                GL.Vertex3( i * unit,  j * unit, h * unit * Mic.AverageVolume * 100.0);                               
                             }
                         }
                     }
