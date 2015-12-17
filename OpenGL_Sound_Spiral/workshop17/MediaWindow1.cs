@@ -99,7 +99,7 @@ namespace workshop17
             if (mouseYnorm < 0.0) mouseYnorm = 0.0;
 
             // comment the part below out when not testing
-            //state = 7;
+            state = 7;
             // state = 5;
 
             if (state==0)
@@ -146,7 +146,10 @@ namespace workshop17
             }
             else if (state == 7)
             {
-                angleXY = time;
+                angleXY = time / 4.0;
+                //angleZ = 0.2 + (Math.PI / 6.0) * Math.Abs (Math.Cos(time / 5.0));
+                //angleZ = 0.35 + (Math.PI / 30.0) * Math.Cos(time * 2.0 );
+                angleZ = Math.PI / 5.0;
             }
             else if (state == 8)
             {
@@ -204,19 +207,6 @@ namespace workshop17
             GL.Color4(0.0, 0.0, 0.0, 1.0);
             GL.LineWidth((float)0.5);
             
-            //GL.Begin(PrimitiveType.Lines);
-            
-            //creates a cube 
-            
-            
-
-            /*
-            for (int i = 0; i < 72; i = i + 3)
-            {
-                GL.Vertex3(vertexarray[i], vertexarray[i + 1], vertexarray[i + 2]);
-            }
-            GL.End();
-             */
 
             // ..............................................  the awesome circle can oscilate with Math - wowow
             // @ Linda - it's about to get 2kewl4skewl
@@ -397,20 +387,23 @@ namespace workshop17
                 {
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     //double a = Mic.PeakFrequencyHz * 20.0;
-                    double a = time / 10.0;
+                    double a = Mic.AverageVolume * 1000.0;
                     double spiralTime = time - 5.0;
+                    double b = Mic.AverageVolume * 100.0;
                     GL.PointSize((float)0.1);
-                    GL.Begin(PrimitiveType.LineLoop);
-                    int points = Mic.WaveLeft.Count / 2;
+                    GL.Begin(PrimitiveType.LineStrip);
+                    int points = 1000;
+                    //int points = (int) Mic.AverageVolume * 1000;
                     for (int i = 0; i < points; i++)
                     {
                         double t = 30.0 * (Math.PI / (double)points) * i;
-                        double helixX = Math.Cos(a * t) * Math.Cos(a * t) * Math.Cos(a * t);
-                        double helixY = Math.Sin(a * t) * Math.Sin(a * t) * Math.Sin(a * t);
-                        double helixZ = Math.Sin(t);
-                        GL.Vertex3(helixX, helixY, helixZ);
+                        double helixX = b * Math.Cos(a * t) * Math.Cos(a * t) * Math.Cos(a * t);
+                        double helixY = b * Math.Sin(a * t) * Math.Sin(a * t) * Math.Sin(a * t);
+                        double helixZ = b * Math.Sin(t);
+                        GL.Vertex3(helixZ, helixY, helixX);
                     }
                     GL.End();
+                   
                 }
                 else if (state == 8)
                 {
