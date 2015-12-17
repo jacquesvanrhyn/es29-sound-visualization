@@ -46,6 +46,9 @@
             // 
             // nextButton
             // 
+            this.nextButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nextButton.AutoSize = true;
             this.nextButton.BackColor = System.Drawing.Color.Transparent;
             this.nextButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.nextButton.FlatAppearance.BorderSize = 0;
@@ -62,6 +65,9 @@
             // 
             // prevButton
             // 
+            this.prevButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.prevButton.AutoSize = true;
             this.prevButton.BackColor = System.Drawing.Color.Transparent;
             this.prevButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.prevButton.FlatAppearance.BorderSize = 0;
@@ -86,6 +92,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
