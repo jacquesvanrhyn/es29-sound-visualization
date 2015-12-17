@@ -100,7 +100,7 @@ namespace workshop17
 
             // comment the part below out when not testing
             //state = 7;
-            state = 14;
+            // state = 14;
 
             if (state==0)
             GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
@@ -131,6 +131,7 @@ namespace workshop17
             else if (state == 3)
             {
                 angleXY = time;
+                angleZ = 0.0;
             }
             else if (state == 4)
             {
@@ -232,6 +233,7 @@ namespace workshop17
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.AverageVolume * 20.0;
                     double spiralTime = time - 5.0;
+                    GL.LineWidth((float)0.5);
                     GL.Begin(PrimitiveType.LineStrip);
                     int points = Mic.WaveLeft.Count * 2;
                     for (int i = 0; i < points; i++)
@@ -257,6 +259,7 @@ namespace workshop17
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.AverageVolume * 20.0;
                     double spiralTime = time - 5.0;
+                    GL.LineWidth((float)0.5);
                     GL.Begin(PrimitiveType.LineStrip);
                     int points = Mic.WaveLeft.Count * 2;
                     for (int i = 0; i < points; i++)
@@ -290,22 +293,24 @@ namespace workshop17
                 else if (state == 3)
                 {
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
-                    double a = Mic.AverageVolume * 100.0;
+                    double a = Mic.AverageVolume * 20.0 + 1.0;
                     double spiralTime = time - 5.0;
-                    GL.PointSize((float)a);
+                    radius = Mic.AverageVolume * 20.0 + 0.25;
+                    GL.PointSize((float)Mic.AverageVolume * (float)100.0);
                     GL.Begin(PrimitiveType.Points);
                     
-                    int points = Mic.WaveLeft.Count / 5;
+                    int points = Mic.WaveLeft.Count / ((int) a * 10);
                     for (int i = 0; i < points; i++)
                     {
                         double t = 30.0 * (Math.PI / (double)points) * i;
-                        double spiralX = radius * Math.Cos(t);
-                        double spiralY = radius * Math.Sin(t);
-                        double spiralZ = radius * Math.Tan(a * t);
+                        double spiralX = radius * Math.Cos(t) * Math.Cos(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
                         GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
                         
                     }
                     GL.End();
+                    radius = 2.0;
 
                 }
                 else if (state == 4)
