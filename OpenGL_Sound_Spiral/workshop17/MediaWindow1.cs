@@ -99,7 +99,7 @@ namespace workshop17
             if (mouseYnorm < 0.0) mouseYnorm = 0.0;
 
             // comment the part below out when not testing
-            state = 5;
+            //state = 7;
 
             if (state==0)
             GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
@@ -118,12 +118,17 @@ namespace workshop17
             angleXY = time;
             viewDistance = 5.0;
             angleZ =Math.PI*SoundIN.TheSoundIN.AverageVolume*50.0;
+            if (state == 1)
+            {
+                angleXY = time / 0.5;
+                angleZ = Math.PI * SoundIN.TheSoundIN.AverageVolume * 60.0;
+            }
 
             // represent cartesian coordinates of the spherical coordinates passed in
             double eyeX = viewTarget.X + viewDistance * Math.Cos(angleXY)*Math.Cos(angleZ);
             double eyeY = viewTarget.Y + viewDistance * Math.Sin(angleXY)*Math.Cos(angleZ);  
             double eyeZ = viewTarget.Z +  viewDistance* Math.Sin(angleZ);
-           
+        
             GL.MatrixMode(MatrixMode.Projection);
 
             // @ Linda, this is the matrix that determines how much is getting animated
@@ -324,6 +329,15 @@ namespace workshop17
                         double spiralY = radius * Math.Sin(t) * Math.Cos(a * t);
                         double spiralZ = radius * Math.Sin(a * t);
                         GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+                }
+                else if (state == 7)
+                {
+                    GL.Begin(PrimitiveType.Lines);
+                    for (int i = 0; i < 72; i = i + 3)
+                    {
+                        GL.Vertex3(vertexarray[i], vertexarray[i + 1], vertexarray[i + 2]);
                     }
                     GL.End();
                 }
