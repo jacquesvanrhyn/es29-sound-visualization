@@ -99,8 +99,8 @@ namespace workshop17
             if (mouseYnorm < 0.0) mouseYnorm = 0.0;
 
             // comment the part below out when not testing
-            // state = 7;
-            // state = 5;
+            //state = 7;
+            state = 14;
 
             if (state==0)
             GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
@@ -178,7 +178,8 @@ namespace workshop17
             }
             else if (state == 14)
             {
-                angleXY = time;
+                angleZ = Math.PI / 5.0;
+                angleXY = time / 4.0;
             }
             else if (state == 15)
             {
@@ -509,6 +510,25 @@ namespace workshop17
                     }
                     GL.End();
                 }
+                else if (state == 14)
+                {
+                    GL.Begin(PrimitiveType.Points);
+                    //int points = 100;
+                    //double max = 100.0;
+                    double unit = .15;
+                    int boxsize = 10;
+                    for (int h = -boxsize; h < boxsize; h++)
+                    {
+                        for (int i = -boxsize; i < boxsize; i++)
+                        {
+                            for (int j = -boxsize; j < boxsize; j++)
+                            {
+                                GL.Vertex3( i * unit,  j * unit, h * unit * Mic.AverageVolume * 100.0);
+                            }
+                        }
+                    }
+                    GL.End();
+                }
                 else if (state == 15)
                 {
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
@@ -543,6 +563,7 @@ namespace workshop17
                     }
                     GL.End();
                 }
+                
 
                 /*
                 // @ jacques -- trying to incorporate the input data... 
