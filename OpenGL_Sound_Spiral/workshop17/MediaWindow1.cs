@@ -56,9 +56,6 @@ namespace workshop17
 
         double viewDistance = 10.0;
 
-        double lastX = 0.0;
-        double lastY = 0.0;
-
         Vector3d viewTarget = new Vector3d(0.0, 0.0, 0.0);
 
         public int state = 0;
@@ -76,7 +73,7 @@ namespace workshop17
 
             if (state==0)
             GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
-            else if (state == 1)
+            else if (state % 2 == 1)
             {
                 GL.ClearColor(0.8f, 0.6f, 0.6f, 1.0f);
             }
@@ -90,52 +87,29 @@ namespace workshop17
 
             angleXY = time;
             viewDistance = 5.0;
-            //angleXY = MouseX;
             angleZ =Math.PI*SoundIN.TheSoundIN.AverageVolume*50.0;
-            //angleZ = Math.Cos(time)*Math.PI*0.4;
-            //angleZ = MouseY;
 
             // represent cartesian coordinates of the spherical coordinates passed in
             double eyeX = viewTarget.X + viewDistance * Math.Cos(angleXY)*Math.Cos(angleZ);
-            double eyeY = viewTarget.Y + viewDistance * Math.Sin(angleXY)*Math.Cos(angleZ);
-            //double eyeX = 0.0;
-            //double eyeY = 0.0;
-            
+            double eyeY = viewTarget.Y + viewDistance * Math.Sin(angleXY)*Math.Cos(angleZ);  
             double eyeZ = viewTarget.Z +  viewDistance* Math.Sin(angleZ);
-            //double eyeZ = viewTarget.Z + viewDistance * Math.Sin(angleZ) * Math.Cos(angleXY);
-            //double eyeZ = 3.0;
            
             GL.MatrixMode(MatrixMode.Projection);
 
             // @ Linda, this is the matrix that determines how much is getting animated
             Matrix4d proj = Matrix4d.Perspective(Math.PI * 0.3, Width / (double)Height, 0.1, 100.0);
             GL.LoadMatrix(ref proj);
-           // GL.LoadIdentity();
-
             GL.MatrixMode(MatrixMode.Modelview);
             
             //view matrix
-            //@ Linda, this matrix is where we're looking in from - you can change it up with all kinds of kewl functions
-            //@ Linda, try uncommenting the second part of eyeZ above - wwwowow so swag
-            double sensitivity = 0.5;
-            double offsetX = (mouseXnorm - lastX) * sensitivity;
-            double offsetY = (mouseYnorm - lastY) * sensitivity;
-            lastX = MouseX;
-            lastY = MouseY;
-
-            // ... @jacques -- flipping the Matrix4d look fucntion to the one underneath it flips the camera perspective
-            //viewTarget.X = offsetX;
-            //viewTarget.Y = offsetY;
              Matrix4d look = Matrix4d.LookAt(eyeX, eyeY, eyeZ, viewTarget.X, viewTarget.Y,  viewTarget.Z, 0.0, 0.0, 1.0);
-            // Matrix4d look = Matrix4d.LookAt(viewTarget.X, viewTarget.Y, viewTarget.Z, eyeX, eyeY, eyeZ, 0.0, 0.0, 1.0);
             GL.LoadMatrix(ref look);
             
             GL.Color4(0.0, 0.0, 0.0, 1.0);
+            GL.LineWidth((float)0.5);
             GL.Begin(PrimitiveType.Lines);
             
             //creates a cube 
-
-            //create a sick cube - wowowowow
             double[] vertexarray = new double[72] {
                                                  1.0, 1.0, 1.0, 
                                                  1.0, -1.0, 1.0,
@@ -187,39 +161,9 @@ namespace workshop17
             }
             GL.End();
 
-            
-            
-            // ..............................................  draw an awesome circle with Math - wowow
-            //......@Linda - have a look at this part first
-            // .....@Jacques -- i got it to work one half at a time -- still a bit unsure how to connect
-            // ..... the two halves together. but they're in point form yay!
-
-
-            /*
-            GL.Color4(1.0, 1.0, 1.0, 1.0);
-            double radius = 2.0;
-            double a = 0.4;
-            //double t = Math.Floor(time / 2);
-            double spiralTime = time - 3.0;
-            GL.Begin(PrimitiveType.Points);
-            for (int i = 0; i < 360; i++)
-            {
-                double t = Math.PI / 180 * i * spiralTime;
-                // double inradians = Math.PI/180 * i * time;
-                double spiralX = radius * Math.Cos(t) / Math.Sqrt(a * a * t * t + 1);
-                double spiralY = radius * Math.Sin(t) / Math.Sqrt(a * a * t * t + 1);
-                double spiralZ = a * radius * t / Math.Sqrt(a * a * t * t + 1);
-                GL.Vertex3(spiralX, spiralY, spiralZ);
-            }
-            GL.End(); 
-            */
-
-            
             // ..............................................  the awesome circle can oscilate with Math - wowow
             // @ Linda - it's about to get 2kewl4skewl
             double radius = 2.0;
-            //GL.Begin(PrimitiveType.LineStrip);
-
             if (MediaIO.SoundIn.Listening)
             {
                 MediaIO.SoundIn.GetLatestSample();
@@ -228,12 +172,8 @@ namespace workshop17
 
                 int size = Mic.WaveLeft.Count / 2; 
                 //we'll just use half of the recorded sample to improve performance
-                // we still have latency? how to fix?
                 double analysisDuration = (double)size / (double)Mic.SamplesPerSecond;
                 dx = 5.0 / (double)size;
-
-                Console.WriteLine(Mic.WaveLeft[0]);
-                Console.WriteLine(Mic.WaveLeft[1]);
 
                 // @ Linda, try changing this up
                 // @jacques -- trying to incorporate the spiral with the input wave 
@@ -242,22 +182,16 @@ namespace workshop17
                 {
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.AverageVolume * 20.0;
-                    //double t = Math.Floor(time / 2);
                     double spiralTime = time - 5.0;
                     GL.Begin(PrimitiveType.LineStrip);
                     int points = Mic.WaveLeft.Count * 2;
                     for (int i = 0; i < points; i++)
                     {
-                        double t = 30.0 * (Math.PI / (double)points) * i;// *Math.Sin(spiralTime);
-                        // double inradians = Math.PI/180 * i * time;
+                        double t = 30.0 * (Math.PI / (double)points) * i;
                         double spiralX = radius * Math.Cos(t) * Math.Cos(a * t);
                         double spiralY = radius * Math.Sin(t) * Math.Cos(a * t);
                         double spiralZ = radius * Math.Sin(a * t);
-                        //GL.Vertex3(spiralX, spiralY, spiralZ);
                         GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
-
-                        // @ jacques -- I think we need to calculate the normal vector to find the 
-                        //              x, y, and z displacements that respond to the input
                     }
                     GL.End();
                 }
@@ -265,22 +199,144 @@ namespace workshop17
                 {
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.AverageVolume * 20.0;
-                    //double t = Math.Floor(time / 2);
                     double spiralTime = time - 5.0;
                     GL.Begin(PrimitiveType.LineStrip);
                     int points = Mic.WaveLeft.Count * 2;
                     for (int i = 0; i < points; i++)
                     {
-                        double t = 30.0 * (Math.PI / (double)points) * i;// *Math.Sin(spiralTime);
-                        // double inradians = Math.PI/180 * i * time;
+                        double t = 30.0 * (Math.PI / (double)points) * i;
                         double spiralX = radius * Math.Cos(t) * Math.Sin(a * t);
                         double spiralY = radius * Math.Sin(t) * Math.Tan(a * t);
                         double spiralZ = radius * Math.Sin(a * t);
-                        //GL.Vertex3(spiralX, spiralY, spiralZ);
                         GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
-
-                        // @ jacques -- I think we need to calculate the normal vector to find the 
-                        //              x, y, and z displacements that respond to the input
+                    }
+                    GL.End();
+                }
+                else if (state == 2)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double a = Mic.AverageVolume * 20.0;
+                    double spiralTime = time - 5.0;
+                    GL.Begin(PrimitiveType.LineStrip);
+                    int points = Mic.WaveLeft.Count * 2;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Sin(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+                }
+                else if (state == 3)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double a = Mic.AverageVolume * 20.0;
+                    //double t = Math.Floor(time / 2);
+                    double spiralTime = time - 5.0;
+                    GL.PointSize((float)radius);
+                    GL.Begin(PrimitiveType.Points);
+                    
+                    int points = Mic.WaveLeft.Count / 10;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i * Math.Sin(spiralTime);
+                        double spiralX = radius * Math.Cos(t) * Math.Sin(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Tan(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                        
+                    }
+                    GL.End();
+                }
+                else if (state == 4)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double a = Mic.AverageVolume * 20.0;
+                    double spiralTime = time - 5.0;
+                    GL.PointSize((float)0.5);
+                    GL.Begin(PrimitiveType.Points);
+                    int points = Mic.WaveLeft.Count / 2;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Sin(a * t * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Tan(a * t * t);
+                        double spiralZ = radius * Math.Sin(a * t * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+                }
+                else if (state == 6)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double a = Mic.PeakFrequencyHz * 20.0;
+                    double spiralTime = time - 5.0;
+                    GL.PointSize((float)0.1);
+                    GL.Begin(PrimitiveType.Points);
+                    int points = Mic.WaveLeft.Count / 2;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+                }
+                else if (state == 8)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double a = Mic.PeakFrequencyHz * 20.0;
+                    double spiralTime = time - 5.0;
+                    GL.LineWidth((float)0.1);
+                    GL.Begin(PrimitiveType.Lines);
+                    int points = Mic.WaveLeft.Count / 10;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+                }
+                else if (state == 9)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double a = Mic.PeakNote * 20.0;
+                    double spiralTime = time - 5.0;
+                    GL.LineWidth((float)0.1);
+                    GL.Begin(PrimitiveType.Lines);
+                    int points = Mic.WaveLeft.Count / 10;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
+                    }
+                    GL.End();
+                }
+                else if (state == 10)
+                {
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    double a = Mic.PeakVolume * 20.0;
+                    double spiralTime = time - 5.0;
+                    GL.LineWidth((float)0.1);
+                    GL.Begin(PrimitiveType.Lines);
+                    int points = Mic.WaveLeft.Count / 10;
+                    for (int i = 0; i < points; i++)
+                    {
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double spiralX = radius * Math.Cos(t) * Math.Cos(a * t);
+                        double spiralY = radius * Math.Sin(t) * Math.Cos(a * t);
+                        double spiralZ = radius * Math.Sin(a * t);
+                        GL.Vertex3(spiralX, spiralY, spiralZ + 3.0 * Mic.WaveLeft[i % Mic.WaveLeft.Count]);
                     }
                     GL.End();
                 }
@@ -324,7 +380,7 @@ namespace workshop17
                 PianoKeyHistory.Add(maxPianoKey);
                 if (PianoKeyHistory.Count > 200) PianoKeyHistory.RemoveAt(0);
 
-                Console.WriteLine(maxFreqHz + "Hz , Piano Key:" + maxPianoKey);
+                // Console.WriteLine(maxFreqHz + "Hz , Piano Key:" + maxPianoKey);
 
 
                 dx = Width / (double)VolumeHistory.Count;

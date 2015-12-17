@@ -29,12 +29,19 @@ namespace workshop17
             this.FormClosing += Form1_FormClosing;
 
             nextButton.Click += nextButton_Click;
+            prevButton.Click += prevButton_Click;
         }
 
         void nextButton_Click(object sender, EventArgs e)
         {
             mediawin.state++;
-            if (mediawin.state > 3) mediawin.state = 0;
+            if (mediawin.state > 11) mediawin.state = 0;
+        }
+
+        void prevButton_Click(object sender, EventArgs e)
+        {
+            mediawin.state--;
+            if (mediawin.state <= 0) mediawin.state = 10;
         }
 
         private void GlControl1_MouseMove(object sender, MouseEventArgs e)
