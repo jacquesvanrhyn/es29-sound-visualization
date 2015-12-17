@@ -124,6 +124,66 @@ namespace workshop17
                 angleXY = time / 0.5;
                 angleZ = Math.PI * SoundIN.TheSoundIN.AverageVolume * 60.0;
             }
+            else if (state == 2)
+            {
+                angleXY = time;
+            }
+            else if (state == 3)
+            {
+                angleXY = time;
+            }
+            else if (state == 4)
+            {
+                angleXY = time;
+            }
+            else if (state == 5)
+            {
+                angleXY = time;
+            }
+            else if (state == 6)
+            {
+                angleXY = time;
+            }
+            else if (state == 7)
+            {
+                angleXY = time;
+            }
+            else if (state == 8)
+            {
+                angleXY = time;
+            }
+            else if (state == 9)
+            {
+                angleXY = time;
+            }
+            else if (state == 10)
+            {
+                angleXY = time;
+            }
+            else if (state == 11)
+            {
+                angleXY = time;
+            }
+            else if (state == 12)
+            {
+                angleXY = time;
+            }
+            else if (state == 13)
+            {
+                angleXY = time;
+            }
+            else if (state == 14)
+            {
+                angleXY = time;
+            }
+            else if (state == 15)
+            {
+                angleXY = time;
+            }
+            else
+            {
+                angleXY = time;
+            }
 
             // represent cartesian coordinates of the spherical coordinates passed in
             double eyeX = viewTarget.X + viewDistance * Math.Cos(angleXY)*Math.Cos(angleZ);
@@ -335,10 +395,20 @@ namespace workshop17
                 }
                 else if (state == 7)
                 {
-                    GL.Begin(PrimitiveType.Lines);
-                    for (int i = 0; i < 72; i = i + 3)
+                    GL.Color4(1.0, 1.0, 1.0, 1.0);
+                    //double a = Mic.PeakFrequencyHz * 20.0;
+                    double a = time / 10.0;
+                    double spiralTime = time - 5.0;
+                    GL.PointSize((float)0.1);
+                    GL.Begin(PrimitiveType.LineLoop);
+                    int points = Mic.WaveLeft.Count / 2;
+                    for (int i = 0; i < points; i++)
                     {
-                        GL.Vertex3(vertexarray[i], vertexarray[i + 1], vertexarray[i + 2]);
+                        double t = 30.0 * (Math.PI / (double)points) * i;
+                        double helixX = Math.Cos(a * t) * Math.Cos(a * t) * Math.Cos(a * t);
+                        double helixY = Math.Sin(a * t) * Math.Sin(a * t) * Math.Sin(a * t);
+                        double helixZ = Math.Sin(t);
+                        GL.Vertex3(helixX, helixY, helixZ);
                     }
                     GL.End();
                 }
