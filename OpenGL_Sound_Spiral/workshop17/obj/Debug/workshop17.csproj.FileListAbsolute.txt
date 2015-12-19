@@ -118,3 +118,6 @@ Z:\es29-sound-visualization\OpenGL_Sound_Spiral\workshop17\obj\Debug\workshop17.
 \\Mac\Home\es29-sound-visualization\OpenGL_Sound_Spiral\workshop17\obj\Debug\workshop17.Form1.resources
 \\Mac\Home\es29-sound-visualization\OpenGL_Sound_Spiral\workshop17\obj\Debug\workshop17.Properties.Resources.resources
 \\Mac\Home\es29-sound-visualization\OpenGL_Sound_Spiral\workshop17\obj\Debug\workshop17.csproj.GenerateResource.Cache
+\\Mac\Home\Desktop\es29-sound-visualization\OpenGL_Sound_Spiral\workshop17\bin\Debug\workshop17.exe.config
+\\Mac\Home\Desktop\es29-sound-visualization\OpenGL_Sound_Spiral\workshop17\obj\Debug\workshop17.exe
+\\Mac\Home\Desktop\es29-sound-visualization\OpenGL_Sound_Spiral\workshop17\obj\Debug\workshop17.pdb
