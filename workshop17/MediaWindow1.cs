@@ -99,7 +99,7 @@ namespace workshop17
             if (mouseYnorm < 0.0) mouseYnorm = 0.0;
 
             // comment the part below out when not testing
-            //state = 7;
+            state = 18;
             //state = 12;
             if (state==0)
             GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
@@ -130,7 +130,8 @@ namespace workshop17
             }
             else if (state == 2)
             {
-                angleXY = time;
+                angleXY = time + SoundIN.TheSoundIN.AverageVolume * 300.0;
+                angleZ = Math.PI / 5.0;
             }
             else if (state == 3)
             {
@@ -153,6 +154,7 @@ namespace workshop17
             else if (state == 7)
             {
                 angleXY = time;
+                angleZ = Math.PI / 5.0;
             }
             else if (state == 8)
             {
@@ -172,6 +174,7 @@ namespace workshop17
             else if (state == 11)
             {
                 angleXY = time;
+                angleZ = 0.0;
             }
             else if (state == 12)
             {
@@ -184,6 +187,7 @@ namespace workshop17
             else if (state == 14)
             {
                 angleXY = time;
+                angleZ = Math.PI / 12.0;
             }
             else if (state == 15)
             {
@@ -223,10 +227,9 @@ namespace workshop17
             
             GL.Color4(0.0, 0.0, 0.0, 1.0);
             GL.LineWidth((float)0.5);
-            
-
+           
             // ..............................................  the awesome circle can oscilate with Math - wowow
-            // @ Linda - it's about to get 2kewl4skewl
+            
             double radius = 2.0;
             if (MediaIO.SoundIn.Listening)
             {
@@ -318,7 +321,7 @@ namespace workshop17
                 else if (state == 5)
                 {
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
-                    double a = Mic.AverageVolume * 20.0;
+                    double a = Mic.AverageVolume * 100.0;
                     double spiralTime = time - 5.0;
                     GL.Begin(PrimitiveType.LineStrip);
                     int points = Mic.WaveLeft.Count * 2;
@@ -356,7 +359,7 @@ namespace workshop17
 
                     double b = 0.2;
                     //double b = Mic.AverageVolume * 15.0;
-                    double offset = b + Mic.AverageVolume * 10.0;
+                    double offset = b + Math.Sqrt(Mic.AverageVolume) * 3.0;
                     
                     GL.Begin(PrimitiveType.LineLoop);
                     GL.Vertex3(b, b, offset); GL.Vertex3(-b, b, offset); GL.Vertex3(-b, -b, offset); GL.Vertex3(b, -b, offset);
@@ -404,7 +407,7 @@ namespace workshop17
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.AverageVolume * 20.0 + 1.0;
                     double spiralTime = time - 5.0;
-                    radius = Mic.AverageVolume * 50.0 + 0.25;
+                    radius = Mic.AverageVolume * 100.0 + 0.7;
                     GL.PointSize((float)Mic.AverageVolume * (float)150.0);
                     GL.Begin(PrimitiveType.Points);
 
@@ -602,7 +605,7 @@ namespace workshop17
                         {
                             for (int j = -boxsize; j < boxsize; j++)
                             {
-                                GL.Vertex3( i * unit,  j * unit, h * unit * Mic.AverageVolume * 100.0);                               
+                                GL.Vertex3( i * unit,  j * unit, h * unit * Mic.AverageVolume * 200.0);                               
                             }
                         }
                     }
@@ -627,10 +630,10 @@ namespace workshop17
                                 GL.Begin(PrimitiveType.LineStrip);
                                 for (int k = 0; k < len; k++)
                                 {
-                                    xoffset = (k * i * k / 1000.0) * Mic.AverageVolume * 50.0;
-                                    yoffset = (k * j * k / 1000.0) * Mic.AverageVolume * 50.0;
+                                    xoffset = (k * i * k / 1000.0) * Mic.AverageVolume * 900.0;
+                                    yoffset = (k * j * k / 1000.0) * Mic.AverageVolume * 900.0;
 
-                                    GL.Vertex3(i * unit + xoffset, j * unit + yoffset, k * zlength / (Mic.AverageVolume * 25.0));
+                                    GL.Vertex3(i * unit + xoffset, j * unit + yoffset, k * zlength / (Mic.AverageVolume * 500.0) - 1.8);
 
                                 }
                                 GL.End();
