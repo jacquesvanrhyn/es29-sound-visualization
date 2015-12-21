@@ -19,28 +19,9 @@ namespace workshop17
         public double MouseX = 0.0; //location of the mouse along X
         public double MouseY = 0.0; //location of the mouse along Y
 
-        SoundSampleFreq Sound1;
-        double[,] Wave1;
-        SoundSample SoundFromFile;
-        double[,] WaveFromFile;
-
-        List<double> VolumeHistory = new List<double>();
-        List<double> PianoKeyHistory = new List<double>();
-
-
-        CFFT fft = new CFFT();
-
-
         //initialization function. Everything you write here is executed once in the begining of the program
         public void Initialize()
         {
-            Sound1 = SoundOUT.TheSoundOUT.AddEmptyFreqSample(0.5, 0.5);
-            Wave1 = Sound1.GetWaveFormD();
-
-            SoundFromFile = SoundOUT.TheSoundOUT.OpenWaveFile(@"piano.wav");
-            WaveFromFile = SoundFromFile.GetWaveFormD();
-            
-
             MediaIO.SoundIn.Start();
         }
 
@@ -98,11 +79,10 @@ namespace workshop17
             if (mouseXnorm < 0.0) mouseXnorm = 0.0;
             if (mouseYnorm < 0.0) mouseYnorm = 0.0;
 
-            // comment the part below out when not testing
-            state = 18;
-            //state = 12;
-            if (state==0)
-            GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
+            if (state == 0)
+            {
+                GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f);
+            }
             else if (state % 2 == 1)
             {
                 GL.ClearColor(0.8f, 0.6f, 0.6f, 1.0f);
@@ -167,8 +147,6 @@ namespace workshop17
             else if (state == 10)
             {
                 angleXY = time / 4.0;
-                //angleZ = 0.2 + (Math.PI / 6.0) * Math.Abs (Math.Cos(time / 5.0));
-                //angleZ = 0.35 + (Math.PI / 30.0) * Math.Cos(time * 2.0 );
                 angleZ = Math.PI / 5.0;
             }
             else if (state == 11)
@@ -246,6 +224,7 @@ namespace workshop17
 
                 if (state == 0)
                 {
+                    // simple cube
                     GL.Color4(0.0, 0.0, 0.0, 1.0);
                     GL.Begin(PrimitiveType.Lines);
                     for (int i = 0; i < 72; i = i + 3)
@@ -256,6 +235,7 @@ namespace workshop17
                 }
                 else if (state == 1)
                 {
+                    // cube + input
                     GL.Color4(0.0, 0.0, 0.0, 1.0);
                     GL.Begin(PrimitiveType.Lines);
                     for (int i = 0; i < 72; i = i + 3)
@@ -266,6 +246,7 @@ namespace workshop17
                 }
                 else if (state == 2)
                 {
+                    // cube + input reversed
                     GL.Color4(0.0, 0.0, 0.0, 1.0);
                     GL.Begin(PrimitiveType.Lines);
                     for (int i = 0; i < 72; i = i + 3)
@@ -276,6 +257,7 @@ namespace workshop17
                 }
                 else if (state == 3)
                 {
+                    // spherical spiral 
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.AverageVolume * 20.0;
                     double spiralTime = time - 5.0;
@@ -302,6 +284,7 @@ namespace workshop17
                 }
                 else if (state == 4)
                 {
+                    // conical spiral
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.AverageVolume * 20.0;
                     double spiralTime = time - 5.0;
@@ -320,6 +303,7 @@ namespace workshop17
                 }
                 else if (state == 5)
                 {
+                    // spiral pellet
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.AverageVolume * 100.0;
                     double spiralTime = time - 5.0;
@@ -338,6 +322,7 @@ namespace workshop17
                 }
                 else if (state == 6)
                 {
+                    // sprial point cloud
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.AverageVolume * 20.0;
                     double spiralTime = time - 5.0;
@@ -356,9 +341,8 @@ namespace workshop17
                 }
                 else if (state == 7)
                 {
-
+                    // exploding cube 
                     double b = 0.2;
-                    //double b = Mic.AverageVolume * 15.0;
                     double offset = b + Math.Sqrt(Mic.AverageVolume) * 3.0;
                     
                     GL.Begin(PrimitiveType.LineLoop);
@@ -382,15 +366,14 @@ namespace workshop17
                 }
                 else if (state == 8)
                 {
+                    // expanding prism
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
-                    //double a = Mic.PeakFrequencyHz * 20.0;
                     double a = Mic.AverageVolume * 1000.0;
                     double spiralTime = time - 5.0;
                     double b = Mic.AverageVolume * 100.0;
                     GL.PointSize((float)0.1);
                     GL.Begin(PrimitiveType.LineStrip);
                     int points = 1000;
-                    //int points = (int) Mic.AverageVolume * 1000;
                     for (int i = 0; i < points; i++)
                     {
                         double t = 30.0 * (Math.PI / (double)points) * i;
@@ -404,6 +387,7 @@ namespace workshop17
                 }
                 else if (state == 9)
                 {
+                    // snowflake point cloud
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.AverageVolume * 20.0 + 1.0;
                     double spiralTime = time - 5.0;
@@ -426,6 +410,7 @@ namespace workshop17
                 }
                 else if (state == 10)
                 {
+                    // peak frequency in hz cloud
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.PeakFrequencyHz * 20.0;
                     double spiralTime = time - 5.0;
@@ -444,6 +429,7 @@ namespace workshop17
                 }
                 else if (state == 11)
                 {
+                    // peak frequency line sphere 
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.PeakFrequencyHz * 20.0;
                     double spiralTime = time - 5.0;
@@ -462,6 +448,7 @@ namespace workshop17
                 }
                 else if (state == 12)
                 {
+                    // peak note line sphere
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.PeakNote * 20.0;
                     double spiralTime = time - 5.0;
@@ -480,6 +467,7 @@ namespace workshop17
                 }
                 else if (state == 13)
                 {
+                    // peak volume line sphere
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.PeakVolume * 20.0;
                     double spiralTime = time - 5.0;
@@ -498,9 +486,8 @@ namespace workshop17
                 }
                 else if (state == 14)
                 {
+                    // peak note point sphere
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
-                    double c = Mic.PeakVolume * 20.0;
-                    double b = Mic.PeakFrequencyHz * 20.0;
                     double a = Mic.PeakNote * 20.0;
                     double spiralTime = time - 5.0;
                     GL.LineWidth((float)0.1);
@@ -532,6 +519,7 @@ namespace workshop17
                 }
                 else if (state == 15)
                 {
+                    // peak frequency point cloud vs max peak frequency line sphere
                     GL.Color4(1.0, 1.0, 1.0, 1.0);
                     double a = Mic.MaxFrequencyHz * 20.0;
                     double spiralTime = time - 5.0;
@@ -638,17 +626,10 @@ namespace workshop17
                                 }
                                 GL.End();
                             }
-
-
-
-                            //GL.Vertex3(i * unit + k/20.0, j * unit + k/20.0, k * zlength);
-
                         }
                     }
                 }   
-             
-            } 
-            
+            }  
         }
     }
 }
